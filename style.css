@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --background-color: #F7F5FB;
+    --text-color: #0B132B;
+    --surface-color: #177E89;
+    --bright-surface-color: #2698a5;
+    --brighter-surface-color: #2fa2af;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #131313;
+        --text-color: #fff;
+        --dark-surface-color: #1b1e1f;
+        --surface-color: #262d2e;
+        --primary-color: #3cbbcc;
+    }
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+main {
+    display: flex;
+    padding: 1vw;
+    flex-direction: column;
+    align-items: center;
+}
+
+#addTaskMenu {
+    background-color: var(--surface-color);
+    margin: 0 auto;
+    padding: 1em;
+    border-radius: 1em;
+    width: 80vw;
+    display: flex;
+    align-items: center;
+}
+
+#addTaskLabel {
+    margin-right: 1em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+#addTaskInput {
+    padding: 0.4em;
+    border-radius: 0.5em;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    background-color: var(--dark-surface-color);
+    color: var(--text-color);
+    flex-grow: 1;
+}
+
+#addTaskButton {
+    background-color: var(--primary-color);
+    padding: 0.5em;
+    border-radius: 1em;
+    border: none;
+    margin-left: 1em;
+    height: 3.5em;
+    width: 3.5em;
+}
+
+#taskView {
+    background-color: var(--surface-color);
+    border-radius: 1em;
+    margin: 1em auto;
+    padding: 1em;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.task {
+    font-size: 1.5rem;
+    display: flex;
+    list-style: none;
+}
