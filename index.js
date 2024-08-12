@@ -1,18 +1,39 @@
+const addTaskInput = document.getElementById('addTaskInput')
+
 let tasks = []
 
-function addTask(inputBox) {
-    if (inputBox.value == '') return;
+class Task {
+    static tasksCreated = 0;
 
-    tasks.push(inputBox.value)
-    inputBox.value = ''
+    constructor(title, description) {
+        this.id = 'TASK_' + Task.tasksCreated;
+        this.title = title;
+        this.description = description;
+        this.isComplete = false;
+        Task.tasksCreated++;
+    }
+}
 
-    let taskHtml = '<div id="taskView">'
+function addTask() {
+    const newTaskTitle = addTaskInput.value;
 
-    for (let i = 0; i < tasks.length; i++) {
-        taskHtml += `<div class="task">${tasks[i]}</div>`
+    if (newTaskTitle == '') return;
+
+    const newTask = new Task(newTaskTitle, '');
+
+    tasks.push(newTask)
+    addTaskInput.value = ''
+
+    let tasksHtml = '<div id="tasks">'
+
+    for (task of tasks) {
+        tasksHtml += '<div class="task">';
+        tasksHtml += `<input id="${task.id}" type="checkbox">`;
+        tasksHtml += `<label for="${task.id}">${task.title}</label>`;
+        tasksHtml += '</div>';
     }
 
-    taskHtml += '</div>'
+    tasksHtml += '</div>';
 
-    document.getElementById('taskView').innerHTML = taskHtml
+    document.getElementById('tasks').innerHTML = tasksHtml;
 }

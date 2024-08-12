@@ -82,8 +82,13 @@ main {
     flex-direction: column;
 }
 
-.task {
-    font-size: 1.5rem;
+#tasks {
     display: flex;
-    list-style: none;
+    flex-direction: column;
+}
+
+.task {
+    display: flex;
+    gap: 0.5em;
+    font-size: 1.5rem;
 }
