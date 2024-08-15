@@ -1,6 +1,14 @@
-const addTaskInput = document.getElementById('addTaskInput')
+const addTaskTextInput = document.getElementById('addTaskTextInput');
+const taskList = document.getElementById('taskList');
 
-let tasks = []
+addTaskTextInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.keycode === 13) addTask();
+})
+
+let tasks = [];
+
+let uncompletedTasks = [];
+let completedTasks = [];
 
 class Task {
     static tasksCreated = 0;
@@ -12,28 +20,81 @@ class Task {
         this.isComplete = false;
         Task.tasksCreated++;
     }
+
+    get checked() {
+        return (this.isComplete) ? 'checked' : '';
+    }
 }
 
 function addTask() {
-    const newTaskTitle = addTaskInput.value;
+    const newTaskTitle = addTaskTextInput.value;
 
-    if (newTaskTitle == '') return;
+    if (newTaskTitle == '') {
+        window.alert('Cannot create empty task');
+        return;
+    }
 
     const newTask = new Task(newTaskTitle, '');
 
-    tasks.push(newTask)
-    addTaskInput.value = ''
+    uncompletedTasks.push(newTask);
+    addTaskTextInput.value = '';
 
-    let tasksHtml = '<div id="tasks">'
+    update();
+}
 
-    for (task of tasks) {
-        tasksHtml += '<div class="task">';
-        tasksHtml += `<input id="${task.id}" type="checkbox">`;
-        tasksHtml += `<label for="${task.id}">${task.title}</label>`;
-        tasksHtml += '</div>';
+function deleteTask(taskId) {
+    uncompletedTasks = uncompletedTasks.filter(task => task.id != taskId);
+    completedTasks = completedTasks.filter(task => task.id != taskId);
+    update();
+}
+
+function toggleCheckTask(taskId, isChecked) {
+    if (isChecked) {
+        const task = completedTasks.find(task => task.id == taskId);
+        completedTasks = completedTasks.filter(task => task.id != taskId);
+        uncompletedTasks.push(task);
+        task.isComplete = !task.isComplete;
     }
 
-    tasksHtml += '</div>';
+    else {
+        const task = uncompletedTasks.find(task => task.id == taskId);
+        uncompletedTasks = uncompletedTasks.filter(task => task.id != taskId);
+        completedTasks.push(task);
+        task.isComplete = !task.isComplete;
+    }
 
-    document.getElementById('tasks').innerHTML = tasksHtml;
+    update();
+
+}
+
+function generateTaskHtml(task) {
+    return `<div class="task">
+            <input id="${task.id}" type="checkbox" ${task.checked} onclick="toggleCheckTask('${task.id}', ${task.isComplete})">
+            <label for="${task.id}" class="task-title">${task.title}</label>
+            <button onclick="deleteTask('${task.id}')" class="remove-btn">Remove</button>
+        </div>`;
+}
+
+function update() {
+    let tasksHtml = '';
+
+    if (uncompletedTasks.length == 0 && completedTasks.length == 0) {
+        tasksHtml = '<p class="task">No tasks to do</p>'
+        taskList.innerHTML = tasksHtml;
+        return;
+    }
+
+    if (uncompletedTasks != 0) {
+        tasksHtml += '<h2 class="task-heading">To Do</h2>';
+        for (task of uncompletedTasks) tasksHtml += generateTaskHtml(task);
+    }
+
+    if (completedTasks.length != 0) {
+        if (uncompletedTasks != 0) tasksHtml += '<br><hr>';
+
+        tasksHtml += '<h2 class="task-heading">Completed</h2>';
+        for (task of completedTasks) tasksHtml += generateTaskHtml(task);
+    }
+
+    taskList.innerHTML = tasksHtml;
 }
